@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import StatusBadge from './statusBadge'
+import {StatusBadge} from './statusBadge'
 
 type Product = {
   id: number

@@ -16,7 +16,7 @@ const statusDetails = {
     "order close": { text: "PO Closed", color: "bg-neutral-900"}
 }
 
-function StatusBadge({ status }: { status: Product["status"] }) {
+export function StatusBadge({ status }: { status: Product["status"] }) {
   const badge = statusDetails[status]
 
   return (
@@ -26,4 +26,16 @@ function StatusBadge({ status }: { status: Product["status"] }) {
   )
 }
 
-export default StatusBadge
+export function LargeStatusBadge({
+  status,
+}: { status: Product["status"] }) {
+  const badge = statusDetails[status]
+
+  return (
+    <div
+      className={`flex items-center justify-center leading-none w-fit text-white font-bold text-sm px-4 py-1 rounded-full ${badge.color}`}
+    >
+      {badge.text}
+    </div>
+  )
+}
