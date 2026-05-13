@@ -7,8 +7,8 @@ import Image from "next/image";
 
 function Navbar() {
   return (
-    <div className="fixed top-0 w-full bg-stone-50 shadow-sm z-20 h-13 md:h-16">
-        <div className="md:max-w-7xl md:mx-auto w-full flex items-center justify-between h-full px-4">
+    <div className="fixed top-0 w-full bg-stone-50 shadow-sm z-50 h-13 md:h-16">
+        <div className="max-w-7xl px-4 md:px-0 md:mx-auto w-full flex items-center justify-between h-full">
             <div className="flex gap-4">
                 <Hamburger/>
             <Link href="/">

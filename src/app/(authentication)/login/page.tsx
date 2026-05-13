@@ -1,4 +1,6 @@
 "use client"
+import { useRouter } from "next/navigation"
+import { login } from "@/lib/authApi"
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
@@ -6,13 +8,33 @@ import {LoginGoogleButton, LoginAppleButton, LoginXButton} from "@/components/pl
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const SignInPage = () => {
+    const router = useRouter()
+    const [loading, setLoading] = useState(false)
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
 
-    const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log({ username, password })
+
+    try {
+      setLoading(true)
+
+      const res = await login({
+        identifier: username,
+        password,
+      })
+
+      localStorage.setItem("access_token", res.access_token)
+      localStorage.setItem("role", res.role)
+
+      router.push("/")
+    } catch (error) {
+      console.error(error)
+      alert("Login gagal")
+    } finally {
+      setLoading(false)
+    }
   }
   return (
   <div className="min-h-screen flex flex-col items-center">
@@ -41,9 +63,13 @@ const SignInPage = () => {
           </div>
           <Link href="/reset" className="text-sm text-blue-800 block text-right hover:underline hover:text-blue-900">Forgot Your Password?</Link>
         </div>
-        <button type="submit" className="bg-blue-800 p-3 font-bold text-stone-50 w-full text-center rounded-sm hover:bg-blue-900 mb-3 cursor-pointer">
-          Login
-        </button>
+        <button
+  type="submit"
+  disabled={loading}
+  className="bg-blue-800 p-3 font-bold text-stone-50 w-full text-center rounded-sm hover:bg-blue-900 mb-3 cursor-pointer"
+>
+  {loading ? "Loading..." : "Login"}
+</button>
       </form>
 
       <p className="text-sm text-gray-500 mb-3 text-center">Or Log in with the following methods</p>

@@ -1,20 +1,26 @@
 import React from 'react'
 import {SwiperTop, SwiperHighlight, SwiperTopMobile, SwiperHighlightMobile} from './SwiperDisplay'
 import Promotion from './promotion'
-import {Catalog, CatalogMobile} from './catalog'
+import {Catalog} from './catalog'
+import { apiFetch } from "@/lib/api"
 
-function Hero() {
+type Category = {
+  category_id: number
+  name: string
+  slug: string
+  parentId: number | null
+}
+
+async function Hero() {
+  const categories: Category[] = await apiFetch("/category")
   return (
-    <div className='mt-15 md:mt-13'>
+    <div className='mt-15 md:mt-16'>
     <div className='flex flex-col gap-5'>
         <SwiperTop/>
         <SwiperTopMobile/>
         <Promotion/>
-        <div className='hidden md:block'>
-          <Catalog/>
-        </div>
-        <div className='block md:hidden'>
-          <CatalogMobile/>
+        <div className=''>
+          <Catalog categories={categories}/>
         </div>
         <div className="hidden md:block">
           <SwiperHighlight/>

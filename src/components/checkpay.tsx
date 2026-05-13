@@ -2,17 +2,29 @@
 
 import { useRouter } from "next/navigation"
 
-export function CheckoutButton() {
+type CheckoutButtonProps = {
+  selectedItems: number[]
+}
+
+export function CheckoutButton({
+  selectedItems,
+}: CheckoutButtonProps) {
   const router = useRouter()
 
   const handleCheckout = () => {
-    router.push("/checkout")
+    localStorage.setItem(
+      "selectedCartIds",
+      JSON.stringify(selectedItems)
+    )
+
+    router.push("/checkout/review")
   }
 
   return (
     <button
       onClick={handleCheckout}
-      className="flex uppercase items-center justify-center gap-2 w-full bg-blue-800 text-stone-50 font-medium py-2 px-6 text-base rounded-xl hover:bg-blue-950 cursor-pointer"
+      disabled={selectedItems.length === 0}
+      className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-800 px-6 py-2 text-base font-medium uppercase text-stone-50 hover:bg-blue-950 disabled:cursor-not-allowed disabled:bg-gray-300"
     >
       Checkout
     </button>
@@ -29,7 +41,7 @@ export function PayButton() {
   return (
     <button
       onClick={handleCheckout}
-      className="flex uppercase items-center justify-center gap-2 w-full bg-blue-800 text-stone-50 font-medium py-2 px-6 text-base rounded-xl hover:bg-blue-950 cursor-pointer"
+      className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-800 px-6 py-2 text-base font-medium uppercase text-stone-50 hover:bg-blue-950"
     >
       Pay Now
     </button>

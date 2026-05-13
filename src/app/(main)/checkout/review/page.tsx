@@ -1,98 +1,157 @@
 "use client"
 
-import React from 'react'
-import { PayButton } from '@/components/checkpay'
-import Link from 'next/link'
+import React, { useEffect, useState } from "react"
+import { PayButton } from "@/components/checkpay"
 import { IoChevronForward } from "react-icons/io5"
+import { useCartStore } from "@/store/useCartStore"
+import OrderItem from "@/components/orderItem"
 
-function page() {
-    const items = [
-  {
-    id: 1,
-    title: "Sample Product",
-    quantity: 1,
-    price: 99.99,
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    id: 2,
-    title: "Sample Product",
-    quantity: 1,
-    price: 99.99,
-    image: "https://via.placeholder.com/100",
-  },
-]
+function Page() {
+  const items = useCartStore((state) => state.items)
+  const fetchCart = useCartStore((state) => state.fetchCart)
 
+  const [selectedCartIds, setSelectedCartIds] = useState<number[]>([])
 
-    const totalItems = items.reduce((sum, item) => sum + item.quantity,0)
-    const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const fullPaymentPrices = JSON.parse(
+    typeof window !== "undefined"
+      ? localStorage.getItem("fullPaymentPrices") || "{}"
+      : "{}"
+  )
+
+  useEffect(() => {
+    fetchCart()
+
+    const saved = localStorage.getItem("selectedCartIds")
+
+    if (saved) {
+      setSelectedCartIds(JSON.parse(saved))
+    }
+  }, [fetchCart])
+
+  const checkoutItems = items.filter((item) =>
+    selectedCartIds.includes(item.cart_id)
+  )
+
+  const totalItems = checkoutItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  )
+
+  const totalPrice = checkoutItems.reduce((sum, item) => {
+    let price
+    if (item.product.orderType === "PO" && item.dpAmount == null) {
+      const stored = fullPaymentPrices[item.product.product_id]
+      price = stored?.fullPaymentPrice
+        ? Number(stored.fullPaymentPrice)
+        : Number(item.product.fullPaymentPrice ?? item.product.price)
+    } else if (item.product.orderType === "PO" && item.dpAmount != null) {
+      price = Number(item.dpAmount)
+    } else {
+      price = Number(item.product.price)
+    }
+
+    return sum + price * item.quantity
+  }, 0)
 
   return (
-    <div className='max-w-350 mx-auto px-25 pb-15 pt-18'>
-        <p className='font-semibold text-2xl text-gray-500 mb-2'>Shipping Details</p>
-        <div className='flex gap-5'>
-        <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-2 border border-gray-200 shadow-sm p-5 rounded-xl w-200">
-                <div className='flex justify-between items-center w-full'>
-                    <p className='text-lg text-gray-700 font-semibold'>Alamat Pengiriman</p>
-                    <button className='text-blue-800 cursor-pointer'>Ganti alamat</button>
-                </div>
-                <div className="mt-2 border-t border-gray-300 w-full"></div>
-                <div className='flex justify-between items-center w-full py-3'>
-                    <p className='text-lg text-gray-700 font-semibold'>Alamat Pengiriman</p>
-                    <button className="w-55 flex items-center justify-between border border-gray-300 rounded-full px-3 py-3 bg-white">
-                        <span className="text-gray-600 text-sm">
-                            Pilih Metode
-                        </span>
-                        <IoChevronForward className="text-blue-700 text-xl" />
-                    </button>
-                </div>
-                <div className=" border-t border-gray-300 w-full"></div>
-                <p className="mt-2 text-gray-500 text-sm font-semibold">Notes:</p>
-                <form className="space-y-2 w-full">
-                    <input type="text" placeholder="Leave a message for us" className="w-full border border-gray-400 rounded-lg px-3 pb-8"/>
-                </form>
-            </div>
-            <div className='flex-1'>
-                <p className='font-semibold text-2xl text-gray-500 mb-2'>Order Details</p>
-        {items.map(item => (
-  <div key={item.id} className="flex items-center gap-4 mb-4 border border-gray-200 shadow-sm p-3 rounded-lg w-200">
-    <img src={item.image} className="w-16 h-16 object-contain" />
-
-    <div className="flex-1">
-      <p>{item.title}</p>
-
-      <p className="text-gray-500 text-sm">
-        Quantity: {item.quantity} item(s)
+    <div className="max-w-350 mx-auto px-25 pb-15 pt-18">
+      <p className="mb-2 text-2xl font-semibold text-gray-500">
+        Shipping Details
       </p>
-    </div>
-    <p className="font-semibold text-blue-800 text-xl">
-      ${item.price * item.quantity}
-    </p>
-  </div>
-))}
+
+      <div className="flex gap-5">
+        <div className="flex flex-col gap-5">
+          <div className="flex w-200 flex-col gap-2 rounded-xl border border-gray-200 p-5 shadow-sm">
+            <div className="flex w-full items-center justify-between">
+              <p className="text-lg font-semibold text-gray-700">
+                Alamat Pengiriman
+              </p>
+
+              <button className="cursor-pointer text-blue-800">
+                Ganti alamat
+              </button>
             </div>
+
+            <div className="mt-2 w-full border-t border-gray-300"></div>
+
+            <div className="flex w-full items-center justify-between py-3">
+              <p className="text-lg font-semibold text-gray-700">
+                Alamat Pengiriman
+              </p>
+
+              <button className="flex w-55 items-center justify-between rounded-full border border-gray-300 bg-white px-3 py-3">
+                <span className="text-sm text-gray-600">
+                  Pilih Metode
+                </span>
+
+                <IoChevronForward className="text-xl text-blue-700" />
+              </button>
+            </div>
+
+            <div className="w-full border-t border-gray-300"></div>
+
+            <p className="mt-2 text-sm font-semibold text-gray-500">
+              Notes:
+            </p>
+
+            <form className="w-full space-y-2">
+              <input
+                type="text"
+                placeholder="Leave a message for us"
+                className="w-full rounded-lg border border-gray-400 px-3 pb-8"
+              />
+            </form>
+          </div>
+ 
+          <div className="flex-1">
+            <p className="mb-2 text-2xl font-semibold text-gray-500">
+              Detail Pesanan
+            </p>
+            <OrderItem />
+          </div>
         </div>
-        <div className="flex flex-col gap-2 border border-gray-200 shadow-sm p-6 rounded-lg w-90 h-65">
-        <p className="text-base font-semibold text-gray-700">Payment Details</p>
-        <div className='flex justify-between text-gray-500'>
-            <p className='text-sm'>Subtotal <span className='text-xs'>({totalItems} items)</span></p>
-            <p className='text-sm'>{totalPrice.toFixed(2)} USD</p>
+
+        <div className="sticky top-25 flex h-65 w-90 flex-col gap-2 rounded-lg border border-gray-200 p-6 shadow-sm">
+          <p className="text-xl font-semibold text-gray-700">
+            Payment Details
+          </p>
+
+          <div className="flex justify-between text-gray-500">
+            <p className="text-sm">
+              Subtotal{" "}
+              <span className="text-xs">
+                ({totalItems} items)
+              </span>
+            </p>
+
+            <p className="text-sm">
+              IDR {totalPrice.toLocaleString("id-ID")}
+            </p>
+          </div>
+
+          <div className="flex justify-between text-gray-500">
+            <p className="text-sm">Shipping Fee</p>
+
+            <p className="text-sm text-green-700">Free</p>
+          </div>
+
+          <div className="mt-1 border-t-2 border-gray-200"></div>
+
+          <div className="mb-10 flex justify-between">
+            <p className="text-lg font-semibold text-gray-700">
+              Grand Total
+            </p>
+
+            <p className="text-sm font-bold text-blue-800">
+              IDR {totalPrice.toLocaleString("id-ID")}
+            </p>
+          </div>
+
+          <PayButton />
         </div>
-        <div className='flex justify-between text-gray-500'>
-            <p className='text-sm'>Shipping Fee</p>
-            <p className='text-sm text-green-700'>Free</p>
-        </div>
-        <div className="mt-1 border-t-2 border-gray-200"></div>
-        <div className='flex justify-between mb-10'>
-            <p className='text-lg font-semibold text-gray-700'>Grand Total</p>
-            <p className='text-sm font-bold text-blue-800'>{totalPrice.toFixed(2)} USD</p>
-        </div>
-        <PayButton/>
       </div>
-        </div>
     </div>
   )
 }
 
-export default page
+export default Page

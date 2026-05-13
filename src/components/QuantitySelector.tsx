@@ -1,11 +1,16 @@
 "use client"
 
-import { useState } from "react"
 import { IoAdd, IoRemove } from "react-icons/io5"
 
-export default function QuantitySelector() {
-  const [qty, setQty] = useState(1)
+type Props = {
+  qty: number
+  setQty: React.Dispatch<React.SetStateAction<number>>
+}
 
+export default function QuantitySelector({
+  qty,
+  setQty,
+}: Props) {
   const increaseQty = () => {
     setQty((prev) => prev + 1)
   }
@@ -24,16 +29,16 @@ export default function QuantitySelector() {
 
       <div className="flex items-center gap-3">
         <div className="w-5 flex justify-center">
-            {qty > 1 && (
-          <button
-            onClick={decreaseQty}
-            className="text-gray-500 hover:text-black text-sm"
-          >
-            <IoRemove />
-          </button>
-        )}
+          {qty > 1 && (
+            <button
+              onClick={decreaseQty}
+              className="text-gray-500 hover:text-black text-sm"
+            >
+              <IoRemove />
+            </button>
+          )}
         </div>
-        
+
         <div className="w-17 h-10 border border-gray-300 rounded-sm flex items-center justify-center text-lg font-medium">
           {qty}
         </div>
