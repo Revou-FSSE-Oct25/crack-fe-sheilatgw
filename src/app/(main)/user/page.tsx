@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Lock, Pencil } from "lucide-react"
 import UserSidebar from "@/components/user/userSidebar"
 import { getUserProfile, UserProfile } from "@/lib/apiUser"
+import { apiFetch } from "@/lib/api"
 
 export default function UserPage() {
   const [user, setUser] = useState<UserProfile | null>(null)
@@ -25,14 +26,8 @@ export default function UserPage() {
   async function handleUpdateProfile(value: string) {
   if (!editField) return
 
-  const token = localStorage.getItem("access_token")
-
-  await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
+  await apiFetch("/user/me", {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
     body: JSON.stringify({
       [editField]: value,
     }),
