@@ -14,8 +14,6 @@ export default function Navlink() {
   const [open, setOpen] = useState(false)
   const { user, loading } = useAuth()
 
-  const role =typeof window !== "undefined" ? localStorage.getItem("role") : null
-  const isAdmin = role === "admin"
 
   return (
     <div className="flex items-center py-2 md:gap-5">
@@ -36,12 +34,6 @@ export default function Navlink() {
                 <IoHeartOutline size={25}/>
             </Link>
         </li>
-        {!loading && isAdmin && (
-        <li className="hidden md:block">
-            <Link href="/admin" className="block text-blue-800 md:p-0">
-                <RiAdminFill size={25}/>
-            </Link>
-        </li>)}
       </ul>
       <div className="hidden md:block border-r border-r-gray-400 h-10"></div>
             <AuthButton/>
