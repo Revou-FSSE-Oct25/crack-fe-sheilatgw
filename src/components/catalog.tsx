@@ -21,7 +21,7 @@ const categoryImages: Record<string, string> = {
   "figma": "/images/categories/figma.jpeg",
   "action-figure": "/images/categories/action-figure.jpeg",
   "mini-figure": "/images/categories/mini-figure.jpg",
-  "lookup": "/images/categories/look-up.jpeg",
+  "lookup": "/images/categories/lookup.jpeg",
   "square-enix-world": "/images/categories/se-world.webp",
   "plush": "/images/categories/plush.jpeg",
   "keychain": "/images/categories/keychain.webp",

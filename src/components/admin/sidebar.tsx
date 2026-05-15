@@ -28,6 +28,9 @@ export default function Sidebar() {
         <Link href="/admin/orders" className="hover:bg-gray-700 px-3 py-2 rounded">
           Orders
         </Link>
+        <Link href="/admin/details" className="hover:bg-gray-700 px-3 py-2 rounded">
+          Details
+        </Link>
       </nav>
     </aside>
   );
