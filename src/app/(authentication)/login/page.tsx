@@ -72,12 +72,7 @@ const SignInPage = () => {
 </button>
       </form>
 
-      <p className="text-sm text-gray-500 mb-3 text-center">Or Log in with the following methods</p>
-      <div className="grid grid-cols-1 space-y-2">
-            <LoginXButton/>
-            <LoginGoogleButton/>
-            <LoginAppleButton/>
-     </div>
+      
      <Link href="/register" className="block text-sm text-blue-800 mt-2 text-center hover:underline hover:text-blue-900">Don't have an account? Click here!</Link>
     </div>
   </div>

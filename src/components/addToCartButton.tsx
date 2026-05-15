@@ -1,10 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Product } from "@/types/product"
 import { useCartStore } from "@/store/useCartStore"
+import { useAuth } from "@/hooks/useAuth"
 import { IoMdClose } from "react-icons/io"
 
 type Props = {
@@ -28,6 +30,8 @@ function getMinimumDP(price: number) {
 }
 
 export function AddToCartButton({ product, quantity, className, disabled }: Props) {
+  const router = useRouter()
+  const { isLoggedIn, loading: authLoading } = useAuth()
   const calculatedMinDP = getMinimumDP(Number(product.price))
   const [paymentModalOpen, setPaymentModalOpen] = useState(false)
   const [successModalOpen, setSuccessModalOpen] = useState(false)
@@ -38,6 +42,11 @@ export function AddToCartButton({ product, quantity, className, disabled }: Prop
   const addItem = useCartStore((state) => state.addItem)
 
   async function handleAddToCart() {
+    if (!isLoggedIn) {
+      router.push("/login")
+      return
+    }
+
     if (product.orderType === "PO") {
       setPaymentModalOpen(true)
       return

@@ -22,4 +22,27 @@ export type Product = {
   minimumDP?: number | null
   fullPaymentPrice?: number | null
   fullPaymentDiscount?: number | null
+
+  categoryId: number
+  characterId: number
+  seriesId: number
+  manufacturerId: number
+
+  category?: {
+    name: string
+  }
+
+  character?: {
+    name: string
+  }
+
+  series?: {
+    name: string
+  }
+
+  manufacturer?: {
+    name: string
+  }
+
+  poDeadline?: string | null
 }

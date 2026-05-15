@@ -1,8 +1,10 @@
 "use client"
 
 import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { IoHeartOutline, IoHeart } from "react-icons/io5"
 import { useWishlistStore } from "@/store/useWishlistStore"
+import { useAuth } from "@/hooks/useAuth"
 import { FaRegTrashAlt } from "react-icons/fa"
 
 type WishlistProps = {
@@ -10,6 +12,8 @@ type WishlistProps = {
 }
 
 export function Wishlist({ productId }: WishlistProps) {
+  const router = useRouter()
+  const { isLoggedIn } = useAuth()
   const fetchWishlist = useWishlistStore(
     (state) => state.fetchWishlist
   )
@@ -31,10 +35,17 @@ export function Wishlist({ productId }: WishlistProps) {
   )
 
   useEffect(() => {
-    fetchWishlist()
-  }, [fetchWishlist])
+    if (isLoggedIn) {
+      fetchWishlist()
+    }
+  }, [fetchWishlist, isLoggedIn])
 
   async function handleClick() {
+    if (!isLoggedIn) {
+      router.push("/login")
+      return
+    }
+
     if (wished) {
       await removeWishlist(productId)
     } else {
@@ -75,6 +86,8 @@ export function Wishlist({ productId }: WishlistProps) {
 export function WishlistSmall({
   productId,
 }: WishlistProps) {
+  const router = useRouter()
+  const { isLoggedIn } = useAuth()
   const fetchWishlist = useWishlistStore(
     (state) => state.fetchWishlist
   )
@@ -96,10 +109,17 @@ export function WishlistSmall({
   )
 
   useEffect(() => {
-    fetchWishlist()
-  }, [fetchWishlist])
+    if (isLoggedIn) {
+      fetchWishlist()
+    }
+  }, [fetchWishlist, isLoggedIn])
 
   async function handleClick() {
+    if (!isLoggedIn) {
+      router.push("/login")
+      return
+    }
+
     if (wished) {
       await removeWishlist(productId)
     } else {

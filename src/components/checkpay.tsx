@@ -6,6 +6,10 @@ type CheckoutButtonProps = {
   selectedItems: number[]
 }
 
+type PayButtonProps = {
+  onClick?: () => void
+}
+
 export function CheckoutButton({
   selectedItems,
 }: CheckoutButtonProps) {
@@ -31,16 +35,11 @@ export function CheckoutButton({
   )
 }
 
-export function PayButton() {
-  const router = useRouter()
-
-  const handleCheckout = () => {
-    router.push("/checkout")
-  }
-
+export function PayButton({ onClick }: PayButtonProps) {
   return (
     <button
-      onClick={handleCheckout}
+      type="button"
+      onClick={onClick}
       className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-800 px-6 py-2 text-base font-medium uppercase text-stone-50 hover:bg-blue-950"
     >
       Pay Now

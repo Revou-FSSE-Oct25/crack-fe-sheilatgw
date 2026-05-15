@@ -9,6 +9,9 @@ import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import "swiper/css";
 import "swiper/css/navigation";
 
+const slides = Array.from({ length: 9 },(_, i) => `/images/top/${i + 1}.webp`)
+const highlights = Array.from({length: 9}, (_, i) => `/images/highlights/${i + 1}.webp`)
+
 export function SwiperTop() {
     const prevRef = useRef(null);
     const nextRef = useRef(null);
@@ -42,10 +45,10 @@ export function SwiperTop() {
             }}
             modules={[Navigation, Autoplay]}
             className="w-full mx-auto">
-              {[1,2,3,4,5,6,7,8,9].map((i) => (
+              {slides.map((slide, i) => (
                 <SwiperSlide>
                   <div className="relative w-full aspect-video rounded-2xl overflow-hidden">
-                     <Image src="/slider4.webp" fill alt="carousel" className="object-cover"/>
+                     <Image src={slide} fill alt={`carousel-${i}`} className="object-cover"/>
                   </div>
                 </SwiperSlide>
               ))}
@@ -90,15 +93,10 @@ export function SwiperHighlight (){
               swiper.params.navigation.nextEl = nextRef.current;
               }}
               modules={[Navigation, Autoplay]}>
-                {[1,2,3,4,5,6,7,8,9].map((i) => (
+                {highlights.map((highlight, i) => (
                 <SwiperSlide key={i}>
                   <div className="relative w-full h-50 rounded-sm overflow-hidden">
-                    <Image
-                      src="/slider4.webp"
-                      fill
-                      alt="carousel"
-                      className="object-cover"
-                    />
+                    <Image src={highlight} fill alt={`carousel-${i}`} className="object-cover"/>
                   </div>
                 </SwiperSlide>
                 ))}
@@ -123,31 +121,31 @@ export const SwiperTopMobile = () => {
                 <IoChevronForward size={20} />
             </button>
         <Swiper
-  slidesPerView={1.5}
-  spaceBetween={12}
-  centeredSlides={true}
-  loop={true}
-  speed={1000}
-  autoplay={{ delay: 5000, disableOnInteraction: false }}
-  navigation={{}}
-  onBeforeInit={(swiper) => {
-    // @ts-ignore
-    swiper.params.navigation.prevEl = prevRef.current;
-    // @ts-ignore
-    swiper.params.navigation.nextEl = nextRef.current;
-  }}
-  modules={[Navigation, Autoplay]}
-  className="w-full mx-auto">
-    {[1,2,3,4,5,6,7,8,9].map((i) => (
-        <SwiperSlide>
-    <div className="relative w-full h-40 rounded-2xl overflow-hidden">
-      <Image src="/slider4.webp" fill alt="carousel" className="object-cover"/>
-    </div>
-  </SwiperSlide>
-      ))}
-</Swiper>
-</div>
-    )
+    slidesPerView={1.5}
+    spaceBetween={12}
+    centeredSlides={true}
+    loop={true}
+    speed={1000}
+    autoplay={{ delay: 5000, disableOnInteraction: false }}
+    navigation={{}}
+    onBeforeInit={(swiper) => {
+      // @ts-ignore
+      swiper.params.navigation.prevEl = prevRef.current;
+      // @ts-ignore
+      swiper.params.navigation.nextEl = nextRef.current;
+    }}
+    modules={[Navigation, Autoplay]}
+    className="w-full mx-auto">
+      {slides.map((slide, i) => (
+          <SwiperSlide>
+      <div className="relative w-full h-40 rounded-2xl overflow-hidden">
+        <Image src={slide} fill alt={`carousel-${i}`} className="object-cover"/>
+      </div>
+    </SwiperSlide>
+        ))}
+  </Swiper>
+  </div>
+      )
 }
 
 export function SwiperHighlightMobile() {
@@ -186,15 +184,10 @@ export function SwiperHighlightMobile() {
     }}
     modules={[Navigation, Autoplay]}
   >
-    {[1,2,3,4,5,6,7,8,9].map((i) => (
+    {highlights.map((highlight, i) => (
       <SwiperSlide key={i}>
         <div className="relative w-full h-40 rounded-2xl overflow-hidden">
-          <Image
-            src="/slider4.webp"
-            fill
-            alt="carousel"
-            className="object-cover"
-          />
+          <Image src={highlight} fill alt="carousel" className="object-cover"/>
         </div>
       </SwiperSlide>
     ))}

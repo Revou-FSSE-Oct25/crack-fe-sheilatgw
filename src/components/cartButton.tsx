@@ -16,6 +16,8 @@ export default function CartButton() {
   useEffect(() => {
     if (!loading && isLoggedIn) {
       fetchCart()
+    } else if (!loading && !isLoggedIn) {
+      useCartStore.setState({ items: [], subtotal: 0 })
     }
   }, [loading, isLoggedIn, fetchCart])
 

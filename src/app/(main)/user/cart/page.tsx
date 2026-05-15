@@ -1,14 +1,18 @@
 "use client"
 
 import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { CheckoutButton } from "@/components/checkpay"
 import CartItem from "@/components/cartItem"
 import { useCartStore } from "@/store/useCartStore"
 import { useCartSelection } from "@/hooks/useCartSelection"
 import { useWishlistStore } from "@/store/useWishlistStore"
+import { useAuth } from "@/hooks/useAuth"
 
 export default function CartPage() {
+  const router = useRouter()
+  const { isLoggedIn, loading } = useAuth()
   const items = useCartStore((state) => state.items)
   const fetchCart = useCartStore((state) => state.fetchCart)
   const increaseQty = useCartStore((state) => state.increaseQty)
@@ -17,9 +21,16 @@ export default function CartPage() {
   const fetchWishlist = useWishlistStore((state) => state.fetchWishlist)
 
   useEffect(() => {
-    fetchCart()
-    fetchWishlist()
-  }, [fetchCart, fetchWishlist])
+    if (!loading && !isLoggedIn) {
+      router.push("/login")
+      return
+    }
+    
+    if (!loading && isLoggedIn) {
+      fetchCart()
+      fetchWishlist()
+    }
+  }, [fetchCart, fetchWishlist, loading, isLoggedIn, router])
 
   const {selectedItems, totalPrice, groupedItems, allSelected, toggleItem, toggleAll,} = useCartSelection(items)
 

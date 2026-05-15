@@ -1,5 +1,3 @@
-import React from 'react'
-
 function Promotion() {
   return (
     <div className='flex flex-col px-3 md:px-6 gap-5'>
