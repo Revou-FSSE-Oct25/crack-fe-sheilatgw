@@ -112,7 +112,7 @@ export default function SearchSelect({
               <button
                 type="button"
                 disabled={creating}
-                onMouseDown={(e) => {
+                onClick={(e) => {
                   e.preventDefault()
                   handleCreate()
                 }}
