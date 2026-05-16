@@ -64,7 +64,7 @@ export default function AuthButton() {
 
       {open && (
         <div className="absolute right-0 top-full z-50 mt-3 w-72 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl">
-          <div className="border-b bg-blue-50 p-4">
+          <div className="border-b border-gray-300 bg-blue-50 p-4">
             <div className="flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-800 text-sm font-bold text-white">
                 {displayName?.charAt(0)?.toUpperCase()}

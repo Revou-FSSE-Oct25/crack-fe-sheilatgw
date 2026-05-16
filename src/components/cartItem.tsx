@@ -58,133 +58,147 @@ export default function CartItem({
   }
 
   return (
-    <div className="mb-4 w-200 overflow-hidden rounded-lg border border-gray-300 bg-white shadow-sm">
-      <div className="flex items-center gap-6 border-b border-gray-300 bg-gray-100 px-6 py-4">
-        <input
-          type="checkbox"
-          checked={allChecked}
-          onChange={toggleGroup}
-          className="h-5 w-5 accent-blue-600"
-        />
+    <div className="mb-4 w-full overflow-hidden rounded-lg border border-gray-300 bg-white shadow-sm md:w-200">
+  <div className="flex items-center gap-4 border-b border-gray-300 bg-gray-100 px-4 py-4 md:gap-6 md:px-6">
+    <input
+      type="checkbox"
+      checked={allChecked}
+      onChange={toggleGroup}
+      className="h-5 w-5 accent-blue-600"
+    />
 
-        <LargeStatusBadge status={orderType === "PO" ? "PO" : "READY_STOCK"} />
-      </div>
+    <LargeStatusBadge status={orderType === "PO" ? "PO" : "READY_STOCK"} />
+  </div>
 
-      <div className="divide-y divide-gray-200">
-        {items.map((item: any) => {
-          const product = item.product ?? item
+  <div className="divide-y divide-gray-200">
+    {items.map((item: any) => {
+      const product = item.product ?? item
 
-          let itemPrice
-          if (product.orderType === "PO" && item.dpAmount == null) {
-            const stored = fullPaymentPrices[product.product_id]
-            itemPrice = stored?.fullPaymentPrice
-              ? Number(stored.fullPaymentPrice)
-              : Number(product.fullPaymentPrice ?? product.price)
-          } else if (product.orderType === "PO" && item.dpAmount != null) {
-            itemPrice = Number(item.dpAmount)
-          } else {
-            itemPrice = Number(product.price)
-          }
+      let itemPrice
+      if (product.orderType === "PO" && item.dpAmount == null) {
+        const stored = fullPaymentPrices[product.product_id]
+        itemPrice = stored?.fullPaymentPrice
+          ? Number(stored.fullPaymentPrice)
+          : Number(product.fullPaymentPrice ?? product.price)
+      } else if (product.orderType === "PO" && item.dpAmount != null) {
+        itemPrice = Number(item.dpAmount)
+      } else {
+        itemPrice = Number(product.price)
+      }
 
-          const totalItemPrice = itemPrice * item.quantity
-          const productId = product.product_id
-          const wished = isWishlisted(productId)
+      const totalItemPrice = itemPrice * item.quantity
+      const productId = product.product_id
+      const wished = isWishlisted(productId)
 
-          return (
-            <div
-              key={item.cartId}
-              className="flex items-center gap-6 px-6 py-5"
-            >
-              <input
-                type="checkbox"
-                checked={selectedItems.includes(item.cartId)}
-                onChange={() => toggleItem(item.cartId)}
-                className="h-5 w-5 accent-blue-600"
-              />
+      return (
+        <div
+          key={item.cartId}
+          className="flex flex-col gap-4 px-4 py-5 md:flex-row md:items-center md:gap-6 md:px-6"
+        >
+          <div className="flex gap-4">
+            <input
+              type="checkbox"
+              checked={selectedItems.includes(item.cartId)}
+              onChange={() => toggleItem(item.cartId)}
+              className="mt-9 h-5 w-5 shrink-0 accent-blue-600 md:mt-0"
+            />
 
-              <img
-                src={product.imageUrl}
-                className="h-25 w-25 rounded-lg object-cover"
-                alt={product.name}
-              />
+            <img
+              src={product.imageUrl}
+              className="h-24 w-24 shrink-0 rounded-lg object-cover md:h-25 md:w-25"
+              alt={product.name}
+            />
 
-              <div className="flex-1">
-                <p className="font-semibold text-gray-700">{product.name}</p>
+            <div className="min-w-0 flex-1 md:hidden">
+              <p className="line-clamp-2 font-semibold text-gray-700">
+                {product.name}
+              </p>
 
-                {product.orderType === "PO" && (
-                  <p className="mt-2 text-sm text-gray-500">
-                    Estimated Arrival: {product.poEstimatedMonth}
-                  </p>
-                )}
+              {product.orderType === "PO" && (
+                <p className="mt-2 text-sm text-gray-500">
+                  Estimated Arrival: {product.poEstimatedMonth}
+                </p>
+              )}
 
-                <p className="mt-4 font-semibold text-gray-700">
-                  IDR {itemPrice.toLocaleString("id-ID")}
+              <p className="mt-3 text-sm font-semibold text-gray-700">
+                IDR {itemPrice.toLocaleString("id-ID")}
+              </p>
+            </div>
+          </div>
 
-                  {product.orderType === "PO" && item.dpAmount != null && (
-                    <span className="font-normal text-gray-400">
-                      {" "}
-                      /{" "}
-                      {Number(
-                        product.fullPaymentPrice ?? product.price
-                      ).toLocaleString("id-ID")}
-                    </span>
+          <div className="hidden flex-1 md:block">
+            <p className="font-semibold text-gray-700">{product.name}</p>
+
+            {product.orderType === "PO" && (
+              <p className="mt-2 text-xs md:text-sm text-gray-500">
+                Estimated Arrival: {product.poEstimatedMonth}
+              </p>
+            )}
+
+            <p className="mt-4 font-semibold text-gray-700">
+              IDR {itemPrice.toLocaleString("id-ID")}
+
+              {product.orderType === "PO" && item.dpAmount != null && (
+                <span className="font-normal text-gray-400">
+                  {" "}
+                  /{" "}
+                  {Number(product.fullPaymentPrice ?? product.price).toLocaleString(
+                    "id-ID"
                   )}
-                </p>
-              </div>
+                </span>
+              )}
+            </p>
+          </div>
 
-              <div className="flex flex-col items-end gap-5">
-                <p className="text-xl font-semibold text-blue-800">
-                  IDR {totalItemPrice.toLocaleString("id-ID")}
-                </p>
+          <div className="flex items-center justify-between gap-3 md:flex-col md:items-end md:gap-5">
+            <p className="hidden md:block text-lg font-semibold text-blue-800 md:text-xl">
+              IDR {totalItemPrice.toLocaleString("id-ID")}
+            </p>
 
-                <div className="flex items-center gap-5">
-                  <button
-                    type="button"
-                    onClick={() => toggleWishlist(productId)}
-                    className="text-gray-600"
-                  >
-                    {wished ? (
-                      <IoHeart size={26} className="text-blue-800" />
-                    ) : (
-                      <IoHeartOutline size={26} />
-                    )}
-                  </button>
+            <div className="ml-auto flex items-center gap-3 md:gap-5">
+              <button type="button" onClick={() => toggleWishlist(productId)} className="text-gray-600">
+                {wished ? (
+                  <IoHeart size={26} className="text-blue-800" />
+                ) : (
+                  <IoHeartOutline size={26} />
+                )}
+              </button>
 
-                  <button
-                    type="button"
-                    onClick={() => removeItem(item.cartId)}
-                    className="text-gray-600"
-                  >
-                    <FaRegTrashAlt size={20} />
-                  </button>
+              <button
+                type="button"
+                onClick={() => removeItem(item.cartId)}
+                className="text-gray-600"
+              >
+                <FaRegTrashAlt size={20} />
+              </button>
 
-                  <div className="flex items-center gap-5 rounded-full border-3 border-gray-200 px-4 py-1">
-                    <button
-                      type="button"
-                      onClick={() => decreaseQty(item.originalItem)}
-                      className="text-gray-400"
-                    >
-                      <FiMinus size={20} />
-                    </button>
+              <div className="flex items-center gap-3 rounded-full border-2 border-gray-200 px-3 py-1 md:gap-5 md:border-3 md:px-4">
+                <button
+                  type="button"
+                  onClick={() => decreaseQty(item.originalItem)}
+                  className="text-gray-400"
+                >
+                  <FiMinus size={20} />
+                </button>
 
-                    <span className="text-lg font-medium text-gray-700">
-                      {item.quantity}
-                    </span>
+                <span className="text-base font-medium text-gray-700 md:text-lg">
+                  {item.quantity}
+                </span>
 
-                    <button
-                      type="button"
-                      onClick={() => increaseQty(item.originalItem)}
-                      className="text-blue-600"
-                    >
-                      <IoMdAdd size={22} />
-                    </button>
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => increaseQty(item.originalItem)}
+                  className="text-blue-600"
+                >
+                  <IoMdAdd size={22} />
+                </button>
               </div>
             </div>
-          )
-        })}
-      </div>
-    </div>
+          </div>
+        </div>
+      )
+    })}
+  </div>
+</div>
   )
 }

@@ -7,6 +7,28 @@ import { useAuth } from "@/hooks/useAuth"
 import { apiFetch } from "@/lib/api"
 import { LargeStatusBadge } from "@/components/statusBadge"
 
+function getStatusStyle(status: string) {
+  switch (status) {
+    case "PENDING_PAYMENT":
+      return "bg-yellow-100 text-yellow-700"
+
+    case "PROCESSING":
+      return "bg-blue-100 text-blue-700"
+
+    case "SHIPPED":
+      return "bg-purple-100 text-purple-700"
+
+    case "COMPLETED":
+      return "bg-green-100 text-green-700"
+
+    case "CANCELLED":
+      return "bg-red-100 text-red-700"
+
+    default:
+      return "bg-gray-100 text-gray-700"
+  }
+}
+
 export default function HistoryPage() {
   const router = useRouter()
 
@@ -81,15 +103,10 @@ export default function HistoryPage() {
             )
 
             return (
-              <div
-                key={order.order_id}
-                className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
-              >
+              <div  key={order.order_id} className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
                 <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-6 py-4">
                   <div className="flex items-center gap-4">
-                    <LargeStatusBadge
-                      status={isPO ? "PO" : "READY_STOCK"}
-                    />
+                    <LargeStatusBadge status={isPO ? "PO" : "READY_STOCK"}/>
 
                     <div>
                       <p className="font-semibold text-gray-700">
@@ -109,7 +126,7 @@ export default function HistoryPage() {
                     </div>
                   </div>
 
-                  <span className="rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-orange-700">
+                  <span className={`rounded-full px-4 py-2 text-sm font-medium ${getStatusStyle(order.status)}`}>
                     {order.status.replaceAll("_", " ")}
                   </span>
                 </div>
@@ -118,7 +135,10 @@ export default function HistoryPage() {
                   {order.items.map((item: any) => {
                     const isDP =
                       item.product.orderType === "PO" &&
-                      item.price !== item.fullPrice
+                      item.price !== item.fullPrice &&
+                      order.remainingAmount > 0
+
+                    const displayPrice = order.remainingAmount <= 0 ? item.fullPrice : item.price
 
                     return (
                       <div
@@ -153,7 +173,7 @@ export default function HistoryPage() {
 
                               <p className="mt-1 font-semibold text-gray-700">
                                 IDR{" "}
-                                {Number(item.price).toLocaleString(
+                                {Number(displayPrice).toLocaleString(
                                   "id-ID"
                                 )}
 
@@ -171,7 +191,7 @@ export default function HistoryPage() {
                             <p className="text-xl font-bold text-blue-800">
                               IDR{" "}
                               {(
-                                Number(item.price) *
+                                Number(displayPrice) *
                                 item.quantity
                               ).toLocaleString("id-ID")}
                             </p>
@@ -195,15 +215,32 @@ export default function HistoryPage() {
                   </div>
 
                   {order.remainingAmount > 0 && (
-                    <div className="flex justify-between text-sm font-medium text-orange-600">
-                      <p>Remaining Payment</p>
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm font-medium text-blue-800">
+                        <p>Remaining Payment</p>
 
-                      <p>
-                        IDR{" "}
-                        {Number(
-                          order.remainingAmount
-                        ).toLocaleString("id-ID")}
-                      </p>
+                        <p>
+                          IDR{" "}
+                          {Number(order.remainingAmount).toLocaleString(
+                            "id-ID"
+                          )}
+                        </p>
+                      </div>
+
+                      {isPO && order.status === "PROCESSING" && (
+                        <button 
+                          onClick={() => {
+                            localStorage.setItem("remainingPaymentOrder", JSON.stringify({
+                              orderId: order.order_id,
+                              remainingAmount: order.remainingAmount,
+                            }))
+                            router.push("/checkout/review?type=remaining")
+                          }}
+                          className="w-full rounded-xl bg-blue-800 py-3 font-semibold text-white transition hover:bg-blue-900"
+                        >
+                          Pay Now
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>

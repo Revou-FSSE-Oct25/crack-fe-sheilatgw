@@ -194,7 +194,7 @@ export default function AdminOrderPage() {
                       </p>
 
                       {order.remainingAmount > 0 && (
-                        <p className="mt-1 text-xs text-orange-600">
+                        <p className="mt-1 text-xs text-blue-800">
                           Remaining:{" "}
                           {formatPrice(order.remainingAmount)}
                         </p>

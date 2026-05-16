@@ -63,6 +63,15 @@ export default function AddressShipping({
 useEffect(() => {
   fetchAddresses()
 }, [])
+
+useEffect(() => {
+  if (addresses.length > 0 && !selectedAddressId) {
+    const defaultAddress = addresses.find((addr) => addr.isDefault)
+    if (defaultAddress) {
+      onSelectAddress(defaultAddress.address_id)
+    }
+  }
+}, [addresses, selectedAddressId, onSelectAddress])
 const selectedAddress = addresses.find(
   (address) => address.address_id === selectedAddressId
 )

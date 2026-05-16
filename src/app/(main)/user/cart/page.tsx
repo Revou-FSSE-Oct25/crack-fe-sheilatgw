@@ -44,12 +44,7 @@ export default function CartPage() {
             {items.length > 0 && (
               <div className="mb-4 flex w-200 items-center gap-5 rounded-lg border border-gray-300
                bg-white px-6 py-4 shadow-sm">
-                <input
-                  type="checkbox"
-                  checked={allSelected}
-                  onChange={toggleAll}
-                  className="h-6 w-6 accent-blue-700 cursor-pointer"
-                />
+                <input type="checkbox" checked={allSelected} onChange={toggleAll}className="h-6 w-6 accent-blue-700 cursor-pointer"/>
                 <p className="text-lg font-semibold text-gray-600">Select All</p>
               </div>
             )}
@@ -64,15 +59,8 @@ export default function CartPage() {
             )}
 
             {Object.entries(groupedItems).map(([orderType, groupedItems]: any) => (
-              <CartItem
-                key={orderType}
-                items={groupedItems}
-                increaseQty={increaseQty}
-                decreaseQty={decreaseQty}
-                removeItem={removeItem}
-                selectedItems={selectedItems}
-                toggleItem={toggleItem}
-              />
+              <CartItem key={orderType} items={groupedItems} increaseQty={increaseQty} decreaseQty={decreaseQty}
+                removeItem={removeItem} selectedItems={selectedItems} toggleItem={toggleItem}/>
             ))}
           </div>
 
@@ -100,12 +88,60 @@ export default function CartPage() {
         </div>
       </div>
 
-      <div className="md:hidden min-h-screen py-22 px-3">
-        <div className="bg-white p-4 border-b border-gray-200 sticky top-12">
-          <p className="text-2xl text-gray-900 font-medium">Shopping Cart</p>
-        </div>
-        <div className="bg-white p-4 border-b border-gray-200">isi lain</div>
+      <div className="md:hidden min-h-screen py-22 px-3 bg-gray-50">
+  <div className="bg-white rounded-lg p-4 border-b border-gray-200 sticky top-12 z-10">
+    <p className="text-2xl text-gray-900 font-medium">
+      Shopping Cart
+    </p>
+  </div>
+
+  <div className="mt-4 space-y-4">
+    {items.length === 0 && (
+      <div className="flex flex-col bg-white items-center justify-center gap-4 border border-gray-300 shadow-sm p-4 rounded-lg w-full h-30">
+        <p className="text-lg">You haven't add anything</p>
+
+        <Link href="/" className="text-blue-800">
+          Let's start shopping!
+        </Link>
       </div>
+    )}
+
+    {Object.entries(groupedItems).map(([orderType, groupedItems]: any) => (
+      <CartItem
+        key={orderType}
+        items={groupedItems}
+        increaseQty={increaseQty}
+        decreaseQty={decreaseQty}
+        removeItem={removeItem}
+        selectedItems={selectedItems}
+        toggleItem={toggleItem}
+      />
+    ))}
+  </div>
+</div>
+<div className="fixed bg-white p-5 bottom-0 left-0 w-full h-25 border-t border-gray-300 z-50 md:hidden">
+  <div className="flex items-center justify-between gap-4">
+    
+    <div className="min-w-0">
+      <p className="text-base uppercase tracking-wide text-gray-400">
+        Total Price
+      </p>
+
+      <h2 className="mt-1 text-base font-bold text-blue-800">
+        IDR {totalPrice.toLocaleString("id-ID")}
+      </h2>
+    </div>
+
+    <div className="flex items-center gap-2">
+      <button onClick={toggleAll} className="rounded-xl bg-blue-800 px-3 py-2 text-base
+      text-white shadow-sm transition active:scale-95">
+        {allSelected ? "UNSELECT" : "SELECT"}
+      </button>
+
+      <CheckoutButton selectedItems={selectedItems} />
+    </div>
+  </div>
+</div>
     </>
   )
 }

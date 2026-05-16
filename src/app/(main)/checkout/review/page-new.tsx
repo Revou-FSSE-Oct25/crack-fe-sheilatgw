@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { PayButton } from "@/components/checkpay"
-import { IoChevronForward } from "react-icons/io5"
 import { useCartStore } from "@/store/useCartStore"
 import OrderItem from "@/components/orderItem"
 import AddressShipping from "@/components/address/addressShipping"
@@ -149,8 +148,8 @@ const shippingCost = isRemainingPayment ? 0 : getShippingCost(shippingOption)
         paymentMethod,
       }
 
-      await apiFetch(`/order/${remainingPaymentData.orderId}/pay-remaining`, {
-        method: "PATCH",
+      await apiFetch(`/order/${remainingPaymentData.orderId}/remaining-payment`, {
+        method: "POST",
         body: JSON.stringify(payload),
       })
 
@@ -236,7 +235,7 @@ const shippingCost = isRemainingPayment ? 0 : getShippingCost(shippingOption)
 
           <div className="flex justify-between text-gray-500">
             <p className="text-sm">
-              {isRemainingPayment ? "Remaining Payment" : "Subtotal"}{" "}
+              {isRemainingPayment ? "Remaining Amount" : "Subtotal"}{" "}
               {!isRemainingPayment && (
                 <span className="text-xs">
                   ({totalItems} items)
@@ -291,13 +290,13 @@ const shippingCost = isRemainingPayment ? 0 : getShippingCost(shippingOption)
     return (
       <div className="max-w-350 mx-auto px-25 pb-15 pt-18">
         <p className="mb-2 text-2xl font-semibold text-gray-500">
-          Shipping Details
+          Payment Details
         </p>
 
         <div className="flex gap-5">
           <div className="flex flex-col gap-5 flex-1">
             <div className="rounded-lg border border-gray-200 p-6 shadow-sm">
-              <p className="text-lg font-semibold text-gray-700 mb-2">
+              <p className="text-lg font-semibold text-gray-700 mb-4">
                 Remaining Payment for Order #{remainingPaymentData?.orderId}
               </p>
               <p className="text-sm text-gray-600">
@@ -313,7 +312,7 @@ const shippingCost = isRemainingPayment ? 0 : getShippingCost(shippingOption)
 
             <div className="flex justify-between text-gray-500">
               <p className="text-sm">
-                Total Payment
+                Remaining Amount
               </p>
 
               <p className="text-sm">

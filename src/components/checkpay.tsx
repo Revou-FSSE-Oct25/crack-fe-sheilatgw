@@ -28,7 +28,8 @@ export function CheckoutButton({
     <button
       onClick={handleCheckout}
       disabled={selectedItems.length === 0}
-      className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-800 px-6 py-2 text-base font-medium uppercase text-stone-50 hover:bg-blue-950 disabled:cursor-not-allowed disabled:bg-gray-300"
+      className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-800 
+      px-1 md:px-6 py-2 text-base md:font-medium uppercase text-stone-50 hover:bg-blue-950 disabled:cursor-not-allowed disabled:bg-gray-300"
     >
       Checkout
     </button>
