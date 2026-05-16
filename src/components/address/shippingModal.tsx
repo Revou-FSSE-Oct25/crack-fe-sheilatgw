@@ -79,7 +79,7 @@ export default function ShippingModal({ open, onClose, onConfirm }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="w-[90%] max-w-xl pt-2 pb-5 rounded-2xl bg-white">
-        <div className="flex items-center justify-between border-b px-8 py-5">
+        <div className="flex items-center justify-between border-b border-gray-300 mx-8 py-5">
           <p className="text-xl font-semibold text-gray-800">Pengiriman</p>
           <button type="button" onClick={onClose} className="text-3xl text-gray-500">
             ×
@@ -105,7 +105,7 @@ export default function ShippingModal({ open, onClose, onConfirm }: Props) {
                     ? "Next Day"
                     : "Same Day"}
                 </span>
-                <IoChevronForward className="text-orange-500" />
+                <IoChevronForward className="text-blue-800" />
               </button>
 
               {activeMethod === method &&
@@ -114,9 +114,9 @@ export default function ShippingModal({ open, onClose, onConfirm }: Props) {
                     key={`${option.courier}-${option.shippingService}`}
                     type="button"
                     onClick={() => setSelectedOption(option)}
-                    className="flex w-full items-center justify-between border-t px-5 py-4 text-left"
+                    className="flex w-full items-center justify-between border-t border-gray-300 px-5 py-4 text-left"
                   >
-                    <span className="font-medium text-orange-500">
+                    <span className="font-medium text-blue-600">
                       {option.label}
                     </span>
 
@@ -128,7 +128,7 @@ export default function ShippingModal({ open, onClose, onConfirm }: Props) {
                       className={`h-6 w-6 rounded-full border-2 ${
                         selectedOption?.courier === option.courier &&
                         selectedOption?.shippingService === option.shippingService
-                          ? "border-orange-500 bg-orange-500"
+                          ? "border-blue-800 bg-blue-800"
                           : "border-gray-400"
                       }`}
                     />
@@ -138,7 +138,7 @@ export default function ShippingModal({ open, onClose, onConfirm }: Props) {
           ))}
         </div>
 
-        <div className="border-t p-6">
+        <div className="border-t border-gray-300 mx-8 p-6">
           <button
             type="button"
             disabled={!selectedOption}
@@ -147,7 +147,7 @@ export default function ShippingModal({ open, onClose, onConfirm }: Props) {
               onConfirm(selectedOption)
               onClose()
             }}
-            className="w-full rounded-xl bg-orange-500 py-4 font-semibold text-white disabled:bg-gray-300"
+            className="w-full rounded-xl bg-blue-800 py-4 font-semibold text-white disabled:bg-gray-300"
           >
             Konfirmasi
           </button>

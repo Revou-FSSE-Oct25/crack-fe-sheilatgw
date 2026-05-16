@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import SearchSelect from "./searchSelect"
 import { createProduct, getCategories, getCharacters, getManufacturers, getSeries, updateProduct } from "@/lib/apiProduct"
 import { AdminProduct, Option, ProductForm } from "@/types/adminProduct"
+import { apiFetch } from "@/lib/api"
 
 const initialForm: ProductForm = {
   name: "",
@@ -103,6 +104,40 @@ export default function ProductModal({
     setSeriesSearch(product.series?.name ?? "")
     setManufacturerSearch(product.manufacturer?.name ?? "")
   }, [open, product])
+
+  async function handleCreateOption(
+  type: "character" | "series" | "manufacturer",
+  name: string,
+) {
+  const endpointMap = {
+    character: "/characters",
+    series: "/series",
+    manufacturer: "/manufacturers",
+  }
+
+  const created = await apiFetch(endpointMap[type], {
+    method: "POST",
+    body: JSON.stringify({ name }),
+  })
+
+  if (type === "character") {
+    setCharacters((prev) => [...prev, created])
+    setForm((prev) => ({ ...prev, characterId: created.chara_id }))
+    setCharacterSearch(created.name)
+  }
+
+  if (type === "series") {
+    setSeries((prev) => [...prev, created])
+    setForm((prev) => ({ ...prev, seriesId: created.series_id }))
+    setSeriesSearch(created.name)
+  }
+
+  if (type === "manufacturer") {
+    setManufacturers((prev) => [...prev, created])
+    setForm((prev) => ({ ...prev, manufacturerId: created.manuf_id }))
+    setManufacturerSearch(created.name)
+  }
+}
 
   function handleChange(
     e: React.ChangeEvent<
@@ -298,43 +333,46 @@ export default function ProductModal({
           />
 
           <SearchSelect
-            value={characterSearch}
-            onChange={setCharacterSearch}
-            placeholder="Character"
-            options={characters.map((item) => ({
-              id: item.chara_id!,
-              name: item.name,
-            }))}
-            onSelect={(item) =>
-              setForm((prev) => ({ ...prev, characterId: item.id }))
-            }
-          />
+          value={characterSearch}
+          onChange={setCharacterSearch}
+          placeholder="Character"
+          options={characters.map((item) => ({
+            id: item.chara_id!,
+            name: item.name,
+          }))}
+          onSelect={(item) =>
+            setForm((prev) => ({ ...prev, characterId: item.id }))
+          }
+          onCreate={(name) => handleCreateOption("character", name)}
+        />
 
-          <SearchSelect
-            value={seriesSearch}
-            onChange={setSeriesSearch}
-            placeholder="Series"
-            options={series.map((item) => ({
-              id: item.series_id!,
-              name: item.name,
-            }))}
-            onSelect={(item) =>
-              setForm((prev) => ({ ...prev, seriesId: item.id }))
-            }
-          />
+        <SearchSelect
+          value={seriesSearch}
+          onChange={setSeriesSearch}
+          placeholder="Series"
+          options={series.map((item) => ({
+            id: item.series_id!,
+            name: item.name,
+          }))}
+          onSelect={(item) =>
+            setForm((prev) => ({ ...prev, seriesId: item.id }))
+          }
+          onCreate={(name) => handleCreateOption("series", name)}
+        />
 
-          <SearchSelect
-            value={manufacturerSearch}
-            onChange={setManufacturerSearch}
-            placeholder="Manufacturer"
-            options={manufacturers.map((item) => ({
-              id: item.manuf_id!,
-              name: item.name,
-            }))}
-            onSelect={(item) =>
-              setForm((prev) => ({ ...prev, manufacturerId: item.id }))
-            }
-          />
+        <SearchSelect
+          value={manufacturerSearch}
+          onChange={setManufacturerSearch}
+          placeholder="Manufacturer"
+          options={manufacturers.map((item) => ({
+            id: item.manuf_id!,
+            name: item.name,
+          }))}
+          onSelect={(item) =>
+            setForm((prev) => ({ ...prev, manufacturerId: item.id }))
+          }
+          onCreate={(name) => handleCreateOption("manufacturer", name)}
+        />
         </div>
 
         <textarea

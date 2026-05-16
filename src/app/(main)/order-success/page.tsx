@@ -13,7 +13,7 @@ export default function OrderSuccessPage() {
         </p>
 
         <Link
-          href="/user/history"
+          href="/user/account/history"
           className="mt-6 inline-block rounded-lg bg-blue-800 px-6 py-3 font-semibold text-white"
         >
           Lihat Pesanan

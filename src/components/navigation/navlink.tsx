@@ -25,12 +25,12 @@ export default function Navlink() {
             <CartButton/>
         </li>
         <li>
-            <Link href="/user/history" className="block text-blue-800 md:p-0">
+            <Link href="/user/account/history" className="block text-blue-800 md:p-0">
                 <MdOutlineHistory size={25}/>
             </Link>
         </li>
         <li className="hidden md:block">
-            <Link href="/user/wishlist" className="block text-blue-800 md:p-0">
+            <Link href="/user/account/wishlist" className="block text-blue-800 md:p-0">
                 <IoHeartOutline size={25}/>
             </Link>
         </li>

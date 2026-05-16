@@ -28,7 +28,7 @@ export default function AddressModal({open, addresses, selectedAddressId, onClos
         return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <div className="w-[90%] max-w-xl pt-2 pb-5 relative rounded-2xl bg-white">
-            <div className="flex items-center justify-between border-b px-8 py-6">
+            <div className="flex items-center justify-between border-b border-gray-300 mx-8 py-6">
             <p className="text-2xl font-semibold text-gray-700">
                 Alamat Pengiriman
             </p>

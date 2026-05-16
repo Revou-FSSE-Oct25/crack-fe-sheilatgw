@@ -13,6 +13,7 @@ type Props = {
   options: SearchSelectOption[]
   onChange: (value: string) => void
   onSelect: (option: SearchSelectOption) => void
+  onCreate?: (name: string) => Promise<void>
 }
 
 export default function SearchSelect({
@@ -21,8 +22,10 @@ export default function SearchSelect({
   options,
   onChange,
   onSelect,
+  onCreate,
 }: Props) {
   const [open, setOpen] = useState(false)
+  const [creating, setCreating] = useState(false)
 
   const filtered = useMemo(() => {
     if (!value) return options
@@ -31,6 +34,23 @@ export default function SearchSelect({
       item.name.toLowerCase().includes(value.toLowerCase()),
     )
   }, [options, value])
+
+  const exactMatch = options.some(
+    (item) => item.name.toLowerCase() === value.trim().toLowerCase(),
+  )
+
+  async function handleCreate() {
+    const name = value.trim()
+    if (!name || !onCreate) return
+
+    try {
+      setCreating(true)
+      await onCreate(name)
+      setOpen(false)
+    } finally {
+      setCreating(false)
+    }
+  }
 
   return (
     <div className="relative">
@@ -70,24 +90,38 @@ export default function SearchSelect({
 
       {open && (
         <div className="absolute left-0 top-full z-50 mt-1 max-h-56 w-full overflow-y-auto rounded-md border bg-white shadow-lg">
-          {filtered.length > 0 ? (
-            filtered.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onMouseDown={() => {
-                  onSelect(item)
-                  onChange(item.name)
-                  setOpen(false)
-                }}
-                className={`block w-full px-4 py-3 text-left text-sm hover:bg-orange-100 ${
-                  value === item.name ? "bg-orange-100" : ""
-                }`}
-              >
-                {item.name}
-              </button>
-            ))
-          ) : (
+          {filtered.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onMouseDown={() => {
+                onSelect(item)
+                onChange(item.name)
+                setOpen(false)
+              }}
+              className={`block w-full px-4 py-3 text-left text-sm hover:bg-orange-100 ${
+                value === item.name ? "bg-orange-100" : ""
+              }`}
+            >
+              {item.name}
+            </button>
+          ))}
+
+          {!exactMatch && value.trim() && onCreate && (
+            <button
+              type="button"
+              disabled={creating}
+              onMouseDown={(e) => {
+                e.preventDefault()
+                handleCreate()
+              }}
+              className="block w-full px-4 py-3 text-left text-sm font-semibold text-blue-800 hover:bg-blue-50 disabled:opacity-50"
+            >
+              {creating ? "Adding..." : `+ Add "${value.trim()}"`}
+            </button>
+          )}
+
+          {filtered.length === 0 && (!value.trim() || !onCreate) && (
             <p className="px-4 py-3 text-sm text-gray-500">
               Data tidak ditemukan
             </p>
