@@ -90,45 +90,45 @@ export default function SearchSelect({
       </div>
 
       {open && (
-        <div className="absolute left-0 top-full z-50 mt-1 max-h-56 w-full overflow-y-auto rounded-md border bg-white shadow-lg">
-          {filtered.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onMouseDown={() => {
-                onSelect(item)
-                onChange(item.name)
-                setOpen(false)
-              }}
-              className={`block w-full px-4 py-3 text-left text-sm hover:bg-orange-100 ${
-                value === item.name ? "bg-orange-100" : ""
-              }`}
-            >
-              {item.name}
-            </button>
-          ))}
+          <div className="absolute left-0 top-full z-50 mt-1 max-h-56 w-full overflow-y-auto rounded-md border bg-white shadow-lg">
+            {filtered.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onMouseDown={() => {
+                  onSelect(item)
+                  onChange(item.name)
+                  setOpen(false)
+                }}
+                className={`block w-full px-4 py-3 text-left text-sm hover:bg-orange-100 ${
+                  value === item.name ? "bg-orange-100" : ""
+                }`}
+              >
+                {item.name}
+              </button>
+            ))}
 
-          {!exactMatch && value.trim() && onCreate && (
-            <button
-              type="button"
-              disabled={creating}
-              onMouseDown={(e) => {
-                e.preventDefault()
-                handleCreate()
-              }}
-              className="block w-full px-4 py-3 text-left text-sm font-semibold text-blue-800 hover:bg-blue-50 disabled:opacity-50"
-            >
-              {creating ? "Adding..." : `+ Add "${value.trim()}"`}
-            </button>
-          )}
+            {!exactMatch && value.trim() && onCreate && (
+              <button
+                type="button"
+                disabled={creating}
+                onMouseDown={(e) => {
+                  e.preventDefault()
+                  handleCreate()
+                }}
+                className="block w-full px-4 py-3 text-left text-sm font-semibold text-blue-800 hover:bg-blue-50 disabled:opacity-50"
+              >
+                {creating ? "Adding..." : `+ Add "${value.trim()}"`}
+              </button>
+            )}
 
-          {filtered.length === 0 && !onCreate && (
-            <p className="px-4 py-3 text-sm text-gray-500">
-              Data tidak ditemukan
-            </p>
-          )}
-        </div>
-      )}
+            {filtered.length === 0 && (!value.trim() || !onCreate) && (
+              <p className="px-4 py-3 text-sm text-gray-500">
+                Data tidak ditemukan
+              </p>
+            )}
+          </div>
+        )}
     </div>
   )
 }
