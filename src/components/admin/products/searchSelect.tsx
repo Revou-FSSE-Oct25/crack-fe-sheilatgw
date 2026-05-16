@@ -122,9 +122,9 @@ export default function SearchSelect({
               </button>
             )}
 
-            {filtered.length === 0 && value.trim() && !onCreate && (
+            {filtered.length === 0 && (
               <p className="px-4 py-3 text-sm text-gray-500">
-                Data tidak ditemukan
+                {value.trim() && !onCreate ? "Data tidak ditemukan" : "No data available"}
               </p>
             )}
           </div>

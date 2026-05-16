@@ -53,18 +53,26 @@ export default function ProductModal({
     if (!open) return
 
     async function fetchOptions() {
-      const [categoryData, characterData, manufacturerData, seriesData] =
-        await Promise.all([
-          getCategories(),
-          getCharacters(),
-          getManufacturers(),
-          getSeries(),
-        ])
+      try {
+        const [categoryData, characterData, manufacturerData, seriesData] =
+          await Promise.all([
+            getCategories(),
+            getCharacters(),
+            getManufacturers(),
+            getSeries(),
+          ])
 
-      setCategories(categoryData)
-      setCharacters(characterData)
-      setManufacturers(manufacturerData)
-      setSeries(seriesData)
+        console.log("Character data:", characterData)
+        console.log("Series data:", seriesData)
+        console.log("Manufacturer data:", manufacturerData)
+
+        setCategories(categoryData)
+        setCharacters(characterData)
+        setManufacturers(manufacturerData)
+        setSeries(seriesData)
+      } catch (error) {
+        console.error("Failed to fetch options:", error)
+      }
     }
 
     fetchOptions()
