@@ -43,8 +43,9 @@ export default function SearchSelect({
     const name = value.trim()
     if (!name || !onCreate) return
 
+    setCreating(true)
+
     try {
-      setCreating(true)
       await onCreate(name)
       setOpen(false)
     } finally {
@@ -121,7 +122,7 @@ export default function SearchSelect({
             </button>
           )}
 
-          {filtered.length === 0 && (!value.trim() || !onCreate) && (
+          {filtered.length === 0 && !onCreate && (
             <p className="px-4 py-3 text-sm text-gray-500">
               Data tidak ditemukan
             </p>
