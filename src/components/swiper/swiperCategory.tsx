@@ -65,8 +65,8 @@ export function SwiperCatalog({ categories }: Props) {
       </button>
 
       <Swiper
-        slidesPerView={2}
-        spaceBetween={7}
+        slidesPerView={1.6}
+        spaceBetween={5}
         grabCursor
         navigation={{}}
         onBeforeInit={(swiper) => {
