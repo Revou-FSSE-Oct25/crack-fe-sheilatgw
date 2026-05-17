@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { PayButton } from "@/components/checkpay"
 import { IoChevronForward } from "react-icons/io5"
@@ -515,4 +515,10 @@ const shippingCost = isRemainingPayment ? 0 : getShippingCost(shippingOption)
   )
 }
 
-export default Page
+export default function CheckoutReviewPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Page />
+    </Suspense>
+  )
+}
