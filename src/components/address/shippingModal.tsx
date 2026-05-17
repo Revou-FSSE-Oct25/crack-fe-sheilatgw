@@ -105,7 +105,8 @@ export default function ShippingModal({ open, onClose, onConfirm }: Props) {
                     ? "Next Day"
                     : "Same Day"}
                 </span>
-                <IoChevronForward className="text-blue-800" />
+                <IoChevronForward className={`text-blue-800 transition-transform duration-200 ${activeMethod === method ?
+                   "rotate-90" : ""}`} />
               </button>
 
               {activeMethod === method &&

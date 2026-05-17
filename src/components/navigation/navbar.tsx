@@ -16,7 +16,7 @@ function Navbar() {
             </Link>
             </div>
             <div className="flex items-center md:gap-10">
-                <SearchBar/>
+                <SearchBar />
                 <Navlink/>
             </div>
         </div>

@@ -47,10 +47,10 @@ export default function OrderItem() {
   }, {} as Record<string, typeof checkoutItems>)
 
   return (
-    <div className="space-y-6">
+    <div className="md:space-y-6">
       {Object.entries(groupedItems).map(([month, groupItems]) => (
-        <div key={month} className="overflow-hidden rounded-xl border border-gray-300 bg-white shadow-sm">
-          <div className="border-b border-gray-200 bg-gray-100 px-6 py-4">
+        <div key={month} className="overflow-hidden rounded-none md:rounded-xl border-none md:border border-gray-300 bg-white shadow-sm">
+          <div className="border-b border-gray-200 bg-gray-200 md:bg-gray-100 px-6 py-4">
             <p className="font-semibold text-gray-700 text-sm">
              <span className="text-gray-500">Delivery Estimate:</span> {month}
             </p>
@@ -77,43 +77,51 @@ export default function OrderItem() {
               }
 
               return (
-                <div key={item.cart_id} className="flex h-30 w-full items-center gap-4 p-4">
-                  <img
-                    src={item.product.imageUrl}
-                    alt={item.product.name}
-                    className="h-16 w-16 object-contain rounded-lg"
-                  />
+                <div key={item.cart_id}>
+                  <div className="flex w-full items-center gap-4 md:h-30 px-4 pt-4 pb-2">
+                    <img src={item.product.imageUrl}
+                      alt={item.product.name}
+                      className="h-16 w-16 object-contain rounded-lg"
+                    />
 
-                  <div className="flex-1">
-                    <p className="text-base font-medium text-gray-800">
-                      {item.product.name}
-                    </p>
+                    <div className="flex-1">
+                      <p className="text-base font-medium text-gray-800 line-clamp-2">
+                        {item.product.name}
+                      </p>
 
-                    <p className="text-sm font-semibold text-gray-600">
-                      IDR {price.toLocaleString("id-ID")}
+                      <p className="text-sm font-semibold text-gray-600">
+                        IDR {price.toLocaleString("id-ID")}
 
-                      {item.product.orderType === "PO" &&
-                        item.dpAmount != null && (
-                          <span className="font-normal text-gray-400">
-                            {" "}
-                            /{" "}
-                            {Number(item.product.price).toLocaleString(
-                              "id-ID"
-                            )}
-                          </span>
-                        )}
-                    </p>
+                        {item.product.orderType === "PO" &&
+                          item.dpAmount != null && (
+                            <span className="font-normal text-gray-400">
+                              {" "}
+                              /{" "}
+                              {Number(item.product.price).toLocaleString("id-ID")}
+                            </span>
+                          )}
+                      </p>
+                    </div>
+
+                    <div className="hidden md:block">
+                      <p className="text-xl font-semibold text-blue-800">
+                        IDR {(price * item.quantity).toLocaleString("id-ID")}
+                      </p>
+
+                      <p className="text-right text-sm text-gray-500">
+                        Qty {item.quantity}
+                      </p>
+                    </div>
                   </div>
 
-                  <div>
+                  <div className="mx-4 border-t-2 border-dashed border-gray-300 md:hidden" />
+
+                  <div className="flex items-center justify-between px-4 py-3 md:hidden">
                     <p className="text-xl font-semibold text-blue-800">
-                      IDR{" "}
-                      {(price * item.quantity).toLocaleString(
-                        "id-ID"
-                      )}
+                      IDR {(price * item.quantity).toLocaleString("id-ID")}
                     </p>
 
-                    <p className="text-right text-sm text-gray-500">
+                    <p className="border rounded-full py-1 px-2 text-sm text-gray-500">
                       Qty {item.quantity}
                     </p>
                   </div>

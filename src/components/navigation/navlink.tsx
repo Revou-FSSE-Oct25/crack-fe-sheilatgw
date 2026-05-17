@@ -4,7 +4,6 @@ import { useState } from "react"
 import Link from "next/link"
 import { IoHeartOutline } from "react-icons/io5";
 import { MdOutlineHistory } from "react-icons/md";
-import { RiAdminFill } from "react-icons/ri";
 import SearchMobile from "../searchMobile";
 import AuthButton from "../authButton";
 import { useAuth } from "@/hooks/useAuth"

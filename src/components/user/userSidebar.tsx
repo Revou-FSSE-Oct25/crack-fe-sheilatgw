@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { Heart, History, User, MapPin, Lock } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { apiFetch } from "@/lib/api"
@@ -13,10 +14,12 @@ const menus = [
       {
         label: "Wishlist",
         href: "/user/account/wishlist",
+        icon: Heart
       },
       {
         label: "Order History",
         href: "/user/account/history",
+        icon: History,
       },
     ],
   },
@@ -27,14 +30,17 @@ const menus = [
       {
         label: "Account Info",
         href: "/user",
+        icon: User,
       },
       {
         label: "Address Book",
         href: "/user/account/address",
+        icon: MapPin,
       },
       {
         label: "Change Password",
         href: "/user/account/change-password",
+        icon: Lock,
       },
     ],
   },
@@ -70,7 +76,7 @@ export default function UserSidebar() {
   }, [])
 
   return (
-    <aside className="h-fit rounded-xl bg-white shadow">
+    <aside className="hidden md:block h-fit rounded-xl bg-white shadow">
       <div className="p-4">
         <h2 className="text-sm font-semibold text-gray-800">
           {user?.fullName || "Loading..."}
@@ -86,19 +92,20 @@ export default function UserSidebar() {
           <nav className="flex flex-col pb-3">
             {menu.items.map((item) => {
               const active = pathname === item.href
-
+              const Icon = item.icon
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "px-4 py-3 text-sm font-semibold transition-colors",
+                    "flex items-center gap-3 px-4 py-3 text-sm font-semibold transition-colors",
 
                     active
                       ? "bg-blue-100 text-blue-600"
                       : "text-gray-600 hover:bg-gray-100",
                   )}
                 >
+                  <Icon size={17} />
                   {item.label}
                 </Link>
               )

@@ -197,7 +197,8 @@ const shippingCost = isRemainingPayment ? 0 : getShippingCost(shippingOption)
 
   if (step === "payment") {
     return (
-      <div className="max-w-350 mx-auto px-25 pb-15 pt-20">
+      <>
+      <div className="hidden md:block max-w-350 mx-auto px-25 pb-15 pt-20">
         <button
           type="button"
           onClick={() => setStep("review")}
@@ -276,20 +277,63 @@ const shippingCost = isRemainingPayment ? 0 : getShippingCost(shippingOption)
         </div>
         
       </div>
+
+      <div className="fixed top-0 left-0 z-50 flex h-16 w-full items-center bg-white px-5 shadow-sm md:hidden">
+      <button type="button" onClick={() => router.back()} className="mr-5 text-3xl text-black">
+        ‹
+      </button>
+
+      <h1 className="text-2xl font-medium text-gray-800">
+        Payment
+      </h1>
+    </div>
+    <div className="md:hidden flex flex-col space-y-4 pt-20 pb-18">
+      <div className="p-5 flex justify-between bg-white">
+            <p className="text-lg font-semibold text-gray-700">
+              Grand Total
+            </p>
+
+            <p className="text-sm font-bold text-blue-800">
+              IDR {(totalPrice + shippingCost).toLocaleString("id-ID")}
+            </p>
+          </div>
+          <div className="flex flex-col items-center bg-white p-5 space-y-5">
+            <p className="text-lg font-semibold text-gray-700">Choose a Payment Method</p>
+                  {paymentMethods.map((method) => (
+                  <button
+                    key={method.value}
+                    type="button"
+                    onClick={() => setPaymentMethod(method.value)}
+                    className={`border-b p-5 bg-white hover:-translate-y-1 transition ${
+                      paymentMethod === method.value
+                        ? "border-blue-500 bg-orange-50 text-blue-600"
+                        : "border-gray-200 bg-white text-gray-700"
+                    }`}
+                  >
+                    {method.label}
+                  </button>
+                ))}
+              <PayButton onClick={handleCreateOrder}/>
+          </div>
+    </div>
+      </>
     )
   }
 
   if (isRemainingPayment && !remainingPaymentData) {
     return (
-      <div className="max-w-350 mx-auto px-25 pb-15 pt-18">
+      <>
+      <div className="hidden md:block max-w-350 mx-auto px-25 pb-15 pt-18">
         <p className="text-center text-gray-500">Loading...</p>
       </div>
+      </>
     )
   }
 
   if (isRemainingPayment) {
     return (
-      <div className="max-w-350 mx-auto px-25 pb-15 pt-18">
+      <>
+      <div className="hidden md:block max-w-350 mx-auto px-25 pb-15 pt-18">
         <p className="mb-2 text-2xl font-semibold text-gray-500">
           Shipping Details
         </p>
@@ -345,11 +389,13 @@ const shippingCost = isRemainingPayment ? 0 : getShippingCost(shippingOption)
           </div>
         </div>
       </div>
+      </>
     )
   }
 
   return (
-    <div className="max-w-350 mx-auto px-25 pb-15 pt-18">
+    <>
+    <div className="hidden md:block max-w-350 mx-auto px-25 pb-15 pt-18">
       <p className="mb-2 text-2xl font-semibold text-gray-500">
         Shipping Details
       </p>
@@ -408,6 +454,64 @@ const shippingCost = isRemainingPayment ? 0 : getShippingCost(shippingOption)
         </div>
       </div>
     </div>
+
+    <div className="fixed top-0 left-0 z-50 flex h-16 w-full items-center bg-white px-5 shadow-sm md:hidden">
+      <button type="button" onClick={() => router.back()} className="mr-5 text-3xl text-black">
+        ‹
+      </button>
+
+      <h1 className="text-2xl font-medium text-gray-800">
+        Checkout
+      </h1>
+    </div>
+    <div className="md:hidden flex flex-col space-y-4 pt-20 pb-18">
+        <AddressShipping selectedAddressId={selectedAddressId} 
+        onSelectAddress={setSelectedAddressId} onSelectShipping={setShippingOption}/>
+        <div className="flex-1 bg-white">
+            <p className="p-5 text-base font-semibold text-gray-500">
+              Detail Pesanan
+            </p>
+            <OrderItem />
+        </div>
+        <div className="bg-white flex flex-col p-5">
+            <p className="text-gray-800 font-semibold mb-4">Payment Details</p>
+            <div className="flex justify-between text-gray-500">
+              <p className="text-sm">
+                Subtotal{" "}
+                <span className="text-xs">
+                  ({totalItems} items)
+                </span>
+              </p>
+
+              <p className="text-sm text-gray-700">
+                IDR {totalPrice.toLocaleString("id-ID")}
+              </p>
+           </div>
+           <div className="flex justify-between text-gray-500">
+            <p className="text-sm">Shipping Fee</p>
+
+            <p className="text-sm text-gray-700">
+              IDR {shippingCost.toLocaleString("id-ID")}
+           </p>
+          </div>
+        </div>
+    </div>
+    <div className="fixed bg-white p-5 bottom-0 left-0 w-full h-25 border-t border-gray-300 z-50 md:hidden">
+      <div className="flex items-center justify-between gap-4">
+        
+        <div className="min-w-0">
+          <p className="text-base uppercase tracking-wide text-gray-400">
+            Total Price
+          </p>
+    
+          <h2 className="mt-1 text-lg font-bold text-blue-800">
+            IDR {totalPrice.toLocaleString("id-ID")}
+          </h2>
+        </div>
+          <PayButton onClick={() => setStep("payment")} disabled={!selectedAddressId || !shippingOption}/>
+      </div>
+    </div>
+    </>
   )
 }
 

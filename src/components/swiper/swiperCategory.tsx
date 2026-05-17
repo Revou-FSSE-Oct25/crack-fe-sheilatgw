@@ -26,7 +26,7 @@ const categoryImages: Record<string, string> = {
   "figma": "/images/categories/figma.jpeg",
   "action-figure": "/images/categories/action-figure.jpeg",
   "mini-figure": "/images/categories/mini-figure.jpg",
-  "lookup": "/images/categories/look-up.jpeg",
+  "lookup": "/images/categories/lookup.jpeg",
   "square-enix-world": "/images/categories/se-world.webp",
   "plush": "/images/categories/plush.jpeg",
   "keychain": "/images/categories/keychain.webp",
@@ -65,7 +65,7 @@ export function SwiperCatalog({ categories }: Props) {
       </button>
 
       <Swiper
-        slidesPerView={1.6}
+        slidesPerView={2}
         spaceBetween={7}
         grabCursor
         navigation={{}}
@@ -83,12 +83,12 @@ export function SwiperCatalog({ categories }: Props) {
         {categories.map((category) => (
           <SwiperSlide key={category.category_id}>
             <Link
-              href={`/categories/${category.slug}`}
-              className="bg-white rounded-xl border border-gray-200 p-3 flex flex-col items-center justify-center h-40 hover:bg-gray-50 transition"
+              href={`/products?search=${encodeURIComponent(category.name)}`}
+              className="bg-white rounded-xl border border-gray-200 p-3 flex flex-col items-center justify-center w-30 h-40 hover:bg-gray-50 transition"
             >
               <img src={ categoryImages[category.slug] ?? "/images/categories/default.png"}
                    alt={category.name} className="h-16 w-16 object-contain mb-3"/>
-              <p className="text-xs text-center font-medium text-gray-700">
+              <p className="text-sm text-center font-bold text-gray-700">
                 {category.name}
               </p>
             </Link>

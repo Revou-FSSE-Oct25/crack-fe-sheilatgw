@@ -54,7 +54,7 @@ export function Catalog({ categories }: Props) {
             return (
               <div key={parent.category_id} className="flex gap-2 items-center">
                 <Link
-                  href={`/categories/${parent.slug}`}
+                  href={`/products?search=${encodeURIComponent(parent.slug.replaceAll("-", " "))}`}
                   className="h-45 w-35 rounded-xl bg-blue-800 flex items-center justify-center text-white text-xl font-bold text-center px-4"
                 >
                   {parent.name}
@@ -62,7 +62,7 @@ export function Catalog({ categories }: Props) {
 
                 <div className="grid grid-cols-10 gap-2">
                   {children.map((child) => (
-                    <Link key={child.category_id} href={`/categories/${child.slug}`} className="h-38 w-25 rounded-xl 
+                    <Link key={child.category_id} href={`/products?search=${encodeURIComponent(child.slug.replaceAll("-", " "))}`} className="h-38 w-25 rounded-xl 
                     bg-white hover:bg-gray-300 transition flex flex-col items-center justify-center text-center
                      text-xs font-bold text-gray-700 px-2">
                         <img src={ categoryImages[child.slug] ?? "/images/categories/default.png"}
@@ -94,7 +94,7 @@ export function Catalog({ categories }: Props) {
             return (
               <div key={parent.category_id} className="flex gap-2 items-center">
                 <Link
-                  href={`/categories/${parent.slug}`}
+                  href={`/products?search=${encodeURIComponent(parent.slug.replaceAll("-", " "))}`}
                   className="h-45 w-35 rounded-xl bg-blue-800 flex items-center justify-center text-white font-semibold text-center px-4 shrink-0"
                 >
                   {parent.name}

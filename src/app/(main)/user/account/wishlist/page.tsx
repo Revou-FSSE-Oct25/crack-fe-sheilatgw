@@ -32,7 +32,7 @@ export default function WishlistPage() {
         My Wishlist
       </h1>
 
-      <div className="grid bg-white max-w-7xl rounded-lg grid-cols-5 gap-6">
+      <div className="grid bg-white max-w-7xl rounded-lg grid-cols-2 md:grid-cols-5 gap-6">
         {items.map((item) => {
           if (!item.product) return null
           

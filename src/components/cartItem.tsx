@@ -122,6 +122,15 @@ export default function CartItem({
 
               <p className="mt-3 text-sm font-semibold text-gray-700">
                 IDR {itemPrice.toLocaleString("id-ID")}
+                {product.orderType === "PO" && item.dpAmount != null && (
+                <span className="font-normal text-gray-400">
+                  {" "}
+                  /{" "}
+                  {Number(product.fullPaymentPrice ?? product.price).toLocaleString(
+                    "id-ID"
+                  )}
+                </span>
+              )}
               </p>
             </div>
           </div>

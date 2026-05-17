@@ -17,7 +17,7 @@ export default async function ProductsPage({ searchParams }: Props) {
   )
 
   return (
-    <main className="min-h-screen bg-stone-50 p-20">
+    <main className="min-h-screen bg-stone-50 p-10 md:p-20">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 bg-white">
 
         {search && (
@@ -33,7 +33,7 @@ export default async function ProductsPage({ searchParams }: Props) {
         )}
 
         {products.length === 0 ? (
-          <div className="bg-white border rounded-lg p-8 text-center text-gray-500">
+          <div className="bg-white p-8 text-center text-gray-500">
             No products found.
           </div>
         ) : (

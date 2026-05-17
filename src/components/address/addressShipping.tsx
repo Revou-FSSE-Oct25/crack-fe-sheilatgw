@@ -78,17 +78,13 @@ const selectedAddress = addresses.find(
 
   return (
     <>
-      <div className="flex w-200 flex-col gap-2 rounded-xl border border-gray-200 p-5 shadow-sm">
+      <div className="hidden md:flex w-200 flex-col gap-2 rounded-xl border border-gray-200 p-5 shadow-sm">
         <div className="flex w-full items-center justify-between">
           <p className="text-lg font-semibold text-gray-700">
             Alamat Pengiriman
           </p>
 
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            className="cursor-pointer text-blue-800"
-          >
+          <button type="button" onClick={() => setOpen(true)} className="cursor-pointer text-blue-800">
             Ganti alamat
           </button>
         </div>
@@ -115,17 +111,13 @@ const selectedAddress = addresses.find(
           )}
         </div>
 
-          <button
-  type="button"
-  onClick={() => setShippingOpen(true)}
-  className="flex w-55 items-center justify-between rounded-full border border-gray-300 bg-white px-3 py-3"
->
-  <span className="text-sm text-gray-600">
-    {selectedShipping ? selectedShipping.label : "Pilih Metode"}
-  </span>
-
-  <IoChevronForward className="text-xl text-blue-700" />
-</button>
+          <button type="button" onClick={() => setShippingOpen(true)} className="flex w-55 items-center justify-between 
+          rounded-full border border-gray-300 bg-white px-3 py-3">
+            <span className="text-sm text-gray-600">
+              {selectedShipping ? selectedShipping.label : "Pilih Metode"}
+            </span>
+            <IoChevronForward className="text-xl text-blue-700" />
+          </button>
         </div>
 
         <div className="w-full border-t border-gray-300" />
@@ -141,28 +133,56 @@ const selectedAddress = addresses.find(
         </form>
       </div>
 
-      <AddressModal
-        open={open}
-        addresses={addresses}
-        selectedAddressId={selectedAddressId}
-        onClose={() => setOpen(false)}
-        onSelect={onSelectAddress}
-        onAddAddress={() => setAddOpen(true)}
-      />
+      <AddressModal open={open} addresses={addresses} selectedAddressId={selectedAddressId} onClose={() => setOpen(false)}
+        onSelect={onSelectAddress} onAddAddress={() => setAddOpen(true)}/>
+      <AddAddressModal open={addOpen} onClose={() => setAddOpen(false)} onSuccess={fetchAddresses}/>    
+      <ShippingModal open={shippingOpen} onClose={() => setShippingOpen(false)} 
+      onConfirm={(option) => { setSelectedShipping(option); onSelectShipping(option)}}/>
 
-      <AddAddressModal
-  open={addOpen}
-  onClose={() => setAddOpen(false)}
-  onSuccess={fetchAddresses}
-/>    
-          <ShippingModal
-  open={shippingOpen}
-  onClose={() => setShippingOpen(false)}
-  onConfirm={(option) => {
-    setSelectedShipping(option)
-    onSelectShipping(option)
-  }}
-/>
+      <div className="md:hidden flex flex-col">
+          <div className="bg-white p-5 space-y-3">
+              <div className="flex w-full items-center justify-between">
+              <p className="text-lg font-semibold text-gray-700">
+                Detail Pengiriman
+              </p>
+
+              <button type="button" onClick={() => setOpen(true)} className="cursor-pointer text-blue-800">
+                Alamat Lainnya
+              </button>
+            </div>
+            <div>
+              {selectedAddress ? (
+                <>
+                  <p className="font-semibold text-gray-700">
+                    {selectedAddress.recipientName} | {selectedAddress.phoneNumber}
+                  </p>
+
+                  <p className="mt-1 text-sm text-gray-500">
+                    {selectedAddress.fullAddress}, {selectedAddress.cityRegency},{" "}
+                    {selectedAddress.province} {selectedAddress.postalCode}
+                  </p>
+                </>
+              ) : (
+                <p className="text-sm text-gray-500">
+                  Belum ada alamat dipilih
+                </p>
+              )}
+            </div>
+            <div className="border-y border-gray-300 py-5">
+              <button type="button" onClick={() => setShippingOpen(true)} className="flex w-full items-center justify-between 
+              rounded-xl border border-gray-300 bg-white px-3 py-3">
+                <span className="text-sm text-gray-600">
+                  {selectedShipping ? selectedShipping.label : "Pilih Metode"}
+                </span>
+                <IoChevronForward className="text-xl text-blue-700" />
+              </button>
+            </div>
+            <form className="w-full space-y-2">
+          <input type="text" placeholder="Leave a message for us" className="w-full rounded-lg border border-gray-400 px-3 pb-5"/>
+        </form>
+          </div>
+          
+      </div>
     </>
   )
 }

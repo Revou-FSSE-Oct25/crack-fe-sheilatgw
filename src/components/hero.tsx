@@ -18,7 +18,6 @@ async function Hero() {
     <div className='flex flex-col gap-5'>
         <SwiperTop/>
         <SwiperTopMobile/>
-        <Promotion/>
         <div className=''>
           <Catalog categories={categories}/>
         </div>

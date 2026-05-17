@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useAuth } from "@/hooks/useAuth"
 import { apiFetch } from "@/lib/api"
-import { LargeStatusBadge } from "@/components/statusBadge"
+import { LargeStatusBadge, StatusBadge } from "@/components/statusBadge"
 
 function getStatusStyle(status: string) {
   switch (status) {
@@ -106,8 +106,12 @@ export default function HistoryPage() {
               <div  key={order.order_id} className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
                 <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-6 py-4">
                   <div className="flex items-center gap-4">
-                    <LargeStatusBadge status={isPO ? "PO" : "READY_STOCK"}/>
-
+                    <div className="md:hidden">
+                      <StatusBadge status={isPO ? "PO" : "READY_STOCK"}/>
+                    </div>
+                    <div className="hidden md:block">
+                      <LargeStatusBadge status={isPO ? "PO" : "READY_STOCK"}/>
+                    </div>
                     <div>
                       <p className="font-semibold text-gray-700">
                         Order #{order.order_id}
@@ -126,7 +130,7 @@ export default function HistoryPage() {
                     </div>
                   </div>
 
-                  <span className={`rounded-full px-4 py-2 text-sm font-medium ${getStatusStyle(order.status)}`}>
+                  <span className={`rounded-full md:px-4 px-2 py-2 text-xs md:text-sm font-medium ${getStatusStyle(order.status)}`}>
                     {order.status.replaceAll("_", " ")}
                   </span>
                 </div>
@@ -188,12 +192,9 @@ export default function HistoryPage() {
                               </p>
                             </div>
 
-                            <p className="text-xl font-bold text-blue-800">
+                            <p className="hidden md:block text-xl font-bold text-blue-800">
                               IDR{" "}
-                              {(
-                                Number(displayPrice) *
-                                item.quantity
-                              ).toLocaleString("id-ID")}
+                              {( Number(displayPrice) * item.quantity ).toLocaleString("id-ID")}
                             </p>
                           </div>
                         </div>
