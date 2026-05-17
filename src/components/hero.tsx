@@ -14,7 +14,7 @@ type Category = {
 async function Hero() {
   const categories: Category[] = await apiFetch("/category")
   return (
-    <div className='mt-15 md:mt-16'>
+    <div className='mt-13 md:mt-16'>
     <div className='flex flex-col gap-5'>
         <SwiperTop/>
         <SwiperTopMobile/>
