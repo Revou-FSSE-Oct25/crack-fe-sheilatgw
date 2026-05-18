@@ -10,7 +10,7 @@ type Props = {
 
 export default function ProductTable({ products, onEdit, onDelete }: Props) {
   return (
-    <div className="overflow-x-auto rounded-xl border bg-white">
+    <div className="overflow-x-auto rounded-xl border border-gray-300 bg-white">
       <table className="w-full text-sm">
         <thead className="bg-gray-100 text-left">
           <tr>
@@ -26,7 +26,7 @@ export default function ProductTable({ products, onEdit, onDelete }: Props) {
 
         <tbody>
           {products.map((product) => (
-            <tr key={product.product_id} className="border-t">
+            <tr key={product.product_id} className="border-t border-gray-300">
               <td className="p-3">
                 <img
                   src={product.imageUrl}

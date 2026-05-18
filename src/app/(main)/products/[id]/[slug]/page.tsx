@@ -112,10 +112,18 @@ export default async function ProductDetail({params,}: {params: Promise<{ id: st
             className="w-full object-cover"/>
             <div className="p-4">
                 <div className="flex items-center gap-3">
-                  <LargeStatusBadge status="PO" />
+                  <LargeStatusBadge status={getProductStatus(product)} />
+                  {product.orderType === "PO" && product.preStatus === "NORMAL" && product.poDeadline && (
                   <p className="text-xs text-gray-500 font-semibold">
-                    Order Closes 26 May 2026!
+                    Order Closes{" "}
+                    {new Date(product.poDeadline).toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                    !
                   </p>
+                )}
                 </div>
                 <h1 className="text-sm font-semibold mt-3 leading-snug">
                   {product.name}
@@ -124,13 +132,16 @@ export default async function ProductDetail({params,}: {params: Promise<{ id: st
                   By {product.manufacturer.name}
                 </p>
                 <p className="text-xl font-semibold pt-8 text-blue-800">
-                  IDR {product.price.toLocaleString('id-ID')}
+                  IDR {Number(product.price.toString()).toLocaleString("id-ID")}
                 </p>
-                <p className="text-xs pt-4 text-blue-700">Pay in full, save IDR 10.000</p>
+                {product.orderType === "PO" && (
+                  <p className="text-xs pt-4 text-blue-700">Pay in full, save IDR {product.fullPaymentDiscount?.toLocaleString("id-ID")}</p>
+                )}
             </div>
         </section>
-
-        <section className="bg-white border-y border-gray-300 p-4">
+        
+        {product.orderType === "PO" && (
+          <section className="bg-white border-y border-gray-300 p-4">
             <div className="flex flex-col gap-2">
                 <p className="text-base text-gray-700 font-bold">
                   Pre-Order Information
@@ -139,6 +150,7 @@ export default async function ProductDetail({params,}: {params: Promise<{ id: st
             releaseMonth={product.poReleaseMonth} estimatedMonth={product.poEstimatedMonth}/>
             </div>
         </section>
+        )}
 
         <section className="bg-white border-y border-gray-300 p-4">
             <ProductInfoRows

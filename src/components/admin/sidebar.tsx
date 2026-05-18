@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Sidebar() {
   return (
-    <aside className="w-55 h-screen bg-gray-900 text-white p-5">
+    <aside className="w-55 min-h-screen bg-gray-900 text-white p-5">
       <div className="flex">
           <Link href="/">
               <Image src="/logo_white.webp" width={85} height={30} alt="logo" priority></Image>

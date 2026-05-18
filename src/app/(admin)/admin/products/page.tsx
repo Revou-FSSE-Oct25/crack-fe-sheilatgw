@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import ProductModal from "@/components/admin/products/productModal"
 import ProductTable from "@/components/admin/products/productTable"
 import { getProducts, deleteProduct } from "@/lib/apiProduct"
@@ -8,6 +8,7 @@ import { AdminProduct } from "@/types/adminProduct"
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<AdminProduct[]>([])
+  const [search, setSearch] = useState("")
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<AdminProduct | null>(
     null,
@@ -22,6 +23,16 @@ export default function AdminProductsPage() {
     fetchProducts()
   }, [])
 
+  const filteredProducts = useMemo(() => {
+    const keyword = search.toLowerCase().trim()
+
+    if (!keyword) return products
+
+    return products.filter((product) =>
+      product.name.toLowerCase().includes(keyword),
+    )
+  }, [products, search])
+
   function handleAdd() {
     setSelectedProduct(null)
     setModalOpen(true)
@@ -33,25 +44,23 @@ export default function AdminProductsPage() {
   }
 
   async function handleDelete(product: AdminProduct) {
-  const confirmed = confirm(
-    `Delete "${product.name}" ?`,
-  )
+    const confirmed = confirm(`Delete "${product.name}" ?`)
 
-  if (!confirmed) return
+    if (!confirmed) return
 
-  try {
-    await deleteProduct(product.product_id)
-    await fetchProducts()
-  } catch (error) {
-    console.error(error)
-    alert("Failed to delete product")
+    try {
+      await deleteProduct(product.product_id)
+      await fetchProducts()
+    } catch (error) {
+      console.error(error)
+      alert("Failed to delete product")
+    }
   }
-}
 
   return (
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-blue-900">Product Admin</h1>
+        <h1 className="text-2xl font-bold text-blue-900">Product List</h1>
 
         <button
           onClick={handleAdd}
@@ -61,7 +70,16 @@ export default function AdminProductsPage() {
         </button>
       </div>
 
-      <ProductTable products={products} onEdit={handleEdit} onDelete={handleDelete}/>
+      <div className="mb-4">
+        <input type="text" placeholder="Search product..." value={search} onChange={(event) => setSearch(event.target.value)}
+          className="w-full rounded-full border border-gray-300 px-4 py-2 text-sm outline-none focus:border-blue-800"/>
+      </div>
+
+      <ProductTable
+        products={filteredProducts}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
 
       <ProductModal
         open={modalOpen}
