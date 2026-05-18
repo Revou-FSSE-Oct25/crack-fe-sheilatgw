@@ -31,7 +31,7 @@ export default function ProductSection({ products }: Props) {
   const [filter, setFilter] = useState<ProductStatus>("ALL")
   const [currentPage, setCurrentPage] = useState(1)
 
-  const perPage = 40
+  const perPage = 42
 
   const filteredProducts = products.filter((product) => {
     if (filter === "ALL") return true
